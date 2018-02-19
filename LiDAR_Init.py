@@ -20,12 +20,13 @@ def Init():
 	fig = plt.subplot()#projection='polar')
 	plt.ion
 	fig.grid(True)
-	plt.plot([-.05,.05,.05,-.05,-.05],[.05,.05,-.05,-.05,.05])
+	plt.plot([-.05,.05,.05,-.05,-.05],[.05,.05,-.05,-.05,.05]) # Box around 0,0 which will eventually be robot area
 
 	while(1):
 		lidar.connect()
 		lidar.start_motor()
 		time.sleep(1)
+		#begins the sampling of data and places it into scan list
 		for i, scan in enumerate(lidar.iter_scans()):
 			print('Scanning')
 			if i >2:
@@ -33,8 +34,8 @@ def Init():
 		lidar.stop()
 		lidar.stop_motor()
 		lidar.disconnect()
-		new_List=zip(*scan)
-		
+		new_List=zip(*scan) #Formats the data nicer
+		#Adds data from scan to appropriate list 
 		for i in xrange(len(new_List[1])):
 			angle_list.append(new_List[1][i])
 			distance_list.append(new_List[2][i])
@@ -46,8 +47,8 @@ def Init():
 		print('Plotting')	
 	
 		for i in xrange(len(angle_list)):
-			x_pos = (math.cos(angle_list[i]*(math.pi/180))*distance_list[i])*0.001
-			y_pos = (math.sin(angle_list[i]*(math.pi/180))*distance_list[i])*0.001
+			x_pos = (math.cos(angle_list[i]*(math.pi/180))*distance_list[i])*0.001 #Conversion 
+			y_pos = (math.sin(angle_list[i]*(math.pi/180))*distance_list[i])*0.001 #Conversion 
 			
 			plt.scatter(x_pos,y_pos,color='green')
 			#plt.scatter(angle_list[i],distance_list[i])
