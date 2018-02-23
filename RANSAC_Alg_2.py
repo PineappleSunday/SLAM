@@ -1,4 +1,3 @@
-from breezyslam.algorithms import CoreSLAM
 import numpy as np
 from rplidar import RPLidar
 import matplotlib.pyplot as plt
@@ -31,7 +30,7 @@ def find_line_model(point_1, point_2):
 #Slope of the line
 #sys.float_info.epsilon is the value 2.2204460492e-16
 
-    m = (point_2[1] - point_1[1]/ (points_2[0] - point_1[0] + sys.float_info.epsilon)
+    m = (point_2[1] - point_1[1])/ (points_2[0] - point_1[0] + sys.float_info.epsilon)
     #y intercept
     c = point_1[1] - m*point_1[0]
 
@@ -88,28 +87,21 @@ def init():
         lidar.connect()
         lidar.start_motor()
         time.sleep(1)
-        count = 1;
+		count = 1;
         #begins the sampling of data and places it into scan list
         try:
-			i = 0;
             for scan in lidar.iter_scans():
-				
                 for quality, angle, distance in scan:
-                    x_pos = (math.cos(deg_to_rad(angle)) * distance) * 0.001 #Conversion 
+					x_pos = (math.cos(deg_to_rad(angle)) * distance) * 0.001 #Conversion 
                     y_pos = (math.sin(deg_to_rad(angle)) * distance) * 0.001 #Conversion 
                     plt.scatter(x_pos, y_pos, color='green')
-					i+=1
-					if (i > 10):
-						lidar.stop()
-						lidar.stop_motor()
-						lidar.disconnect()
-						break
+					
                 plt.pause(0.5)
 				
 				extracted_list = extract_X_Y(scan)
 				x_list1, y_list1= RANSAC(extracted_list)
 				for k in xrange(len(extracted_list)):
-					plt.plot()x_list1[i],y_list1[i],'r')
+					plt.plot(x_list1[i],y_list1[i],'r')
 				
         except Exception as e:
             pass
