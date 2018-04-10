@@ -1,4 +1,3 @@
-from breezyslam.algorithms import CoreSLAM
 import numpy as np
 from rplidar import RPLidar
 import matplotlib.pyplot as plt
